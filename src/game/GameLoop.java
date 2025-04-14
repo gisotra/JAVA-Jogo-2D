@@ -3,6 +3,8 @@ package game;
 public class GameLoop implements Runnable {
 
     GamePanel gp;
+    int realFps = 0;
+    public int finalFps;
 
     public GameLoop(GamePanel gp) {
         this.gp = gp;
@@ -10,7 +12,6 @@ public class GameLoop implements Runnable {
 
     @Override
     public void run() {
-        int realFps = 0;
 
         double frameTime = 1_000_000_000.0/gp.FPS;
         double deltaTime;
@@ -43,6 +44,7 @@ public class GameLoop implements Runnable {
             secondCounter += (System.nanoTime() - start)/1_000_000_000;
 
             if(secondCounter >= 1){
+                finalFps = realFps;
                 realFps = 0;
                 secondCounter = 0;
             }
