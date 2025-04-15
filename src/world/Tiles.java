@@ -19,7 +19,7 @@ public class Tiles {
 
     private void loadTiles(){
         try {
-            tile[0] = ImageIO.read(getClass().getResourceAsStream("/tiles/bricktile.png"));
+            tile[0] = ImageIO.read(getClass().getResourceAsStream("/tiles/grasstile.png"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

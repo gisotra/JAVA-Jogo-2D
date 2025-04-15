@@ -2,6 +2,7 @@ package entities;
 
 import game.GameLoop;
 import game.GamePanel;
+import world.World;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -14,11 +15,13 @@ public abstract class Entity {
     public double realSpeed;
     boolean diagonal = false;
     BufferedImage texture;
+    World world;
 
     GamePanel gp;
 
-    public Entity(GamePanel gp){
+    public Entity(GamePanel gp,World world){
         this.gp = gp;
+        this.world = world;
         setDefaultValues();
     }
 

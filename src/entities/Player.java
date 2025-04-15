@@ -1,27 +1,30 @@
 package entities;
 
 import game.GamePanel;
+import world.World;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.IOException;
 
 public class Player extends Entity{
+    double nextX;
+    double nextY;
     double distX;
     double distY;
     double cameraSpeed = 3;
     double realCameraSpeed;
-    public Player(GamePanel gp){
-        super(gp);
+    public Player(GamePanel gp, World world){
+        super(gp,world);
     }
-    double screenCenterY = gp.screenHeight/2 - gp.tileSize/2;
-    double screenCenterX = gp.screenWidth/2 - gp.tileSize/2;
+    int screenCenterY = gp.screenHeight/2 - gp.tileSize/2;
+    int screenCenterX = gp.screenWidth/2 - gp.tileSize/2;
 
     @Override
     public void setDefaultValues() {
-        x = (double)gp.screenWidth/2 - gp.tileSize/2;
-        y = (double)gp.screenHeight/2 - gp.tileSize/2;
-        speed = gp.tileSize*4;
+        x = (double) gp.screenWidth /2 - (double) gp.tileSize /2;
+        y = (double) gp.screenHeight /2 - (double) gp.tileSize /2;
+        speed = gp.tileSize*5;
         try {
             texture = ImageIO.read(getClass().getResourceAsStream("/players/player_idle_down.png"));
         } catch (IOException e) {
@@ -31,19 +34,23 @@ public class Player extends Entity{
 
     @Override
     public void update(double deltaTime) {
+        gp.camera.x = (int)x - screenCenterX;
+        gp.camera.y = (int)y - screenCenterY;
+
         distX = x - gp.camera.x - screenCenterX;
         distY = y - gp.camera.y - screenCenterY;;
 
-        System.out.println("distX = " + distX);
-        System.out.println("distX = " + distY);
+        nextX = x;
+        nextY = y;
 
         realSpeed = speed;
         realCameraSpeed = cameraSpeed;
+
         if(gp.kh.upKey && (gp.kh.leftKey || gp.kh.rightKey) || gp.kh.downKey && (gp.kh.leftKey || gp.kh.rightKey)) {
             realSpeed /= Math.sqrt(2);
         }
         if (gp.kh.upKey) {
-            y -= realSpeed * deltaTime; //player
+            nextY -= (int) (realSpeed * deltaTime); //player
             try {
                 texture = ImageIO.read(getClass().getResourceAsStream("/players/player_idle_up.png"));
             } catch (IOException e) {
@@ -51,7 +58,7 @@ public class Player extends Entity{
             }
         }
         if (gp.kh.downKey) {
-            y += realSpeed * deltaTime; //player
+            nextY += (int) (realSpeed * deltaTime); //player
             try {
                 texture = ImageIO.read(getClass().getResourceAsStream("/players/player_idle_down.png"));
             } catch (IOException e) {
@@ -59,7 +66,7 @@ public class Player extends Entity{
             }
         }
         if (gp.kh.leftKey) {
-            x -= realSpeed * deltaTime; //player
+            nextX -= (int) (realSpeed * deltaTime); //player
             try {
                 texture = ImageIO.read(getClass().getResourceAsStream("/players/player_idle_left.png"));
             } catch (IOException e) {
@@ -67,7 +74,7 @@ public class Player extends Entity{
             }
         }
         if (gp.kh.rightKey) {
-            x += realSpeed * deltaTime; //player
+            nextX += (int) (realSpeed * deltaTime); //player
             try {
                 texture = ImageIO.read(getClass().getResourceAsStream("/players/player_idle_right.png"));
             } catch (IOException e) {
@@ -75,27 +82,15 @@ public class Player extends Entity{
             }
         }
 
-        if(gp.camera.x != x - screenCenterX){
-            if(gp.camera.x > x - screenCenterX){
-                gp.camera.x-= realCameraSpeed;
-            }
-            if(gp.camera.x < x - screenCenterX){
-                gp.camera.x+= realCameraSpeed;
-            }
-        }
-        if(gp.camera.y != y - screenCenterY){
-            if(gp.camera.y > y - screenCenterY){
-                gp.camera.y-= realCameraSpeed;
-            }
-            if(gp.camera.y < y - screenCenterY){
-                gp.camera.y+= realCameraSpeed;
-            }
-        }
+        if(nextX <= world.width && nextX >= 0)
+            x = nextX;
+        if(nextY <= world.height && nextY >= 0)
+            y = nextY;
 
     }
 
     @Override
     public void render(Graphics2D g2d){
-        g2d.drawImage(texture,(int)x - gp.camera.x,(int)y - gp.camera.y,gp.tileSize, gp.tileSize, null);
+        g2d.drawImage(texture,screenCenterX,screenCenterY,gp.tileSize, gp.tileSize, null);
     }
 }

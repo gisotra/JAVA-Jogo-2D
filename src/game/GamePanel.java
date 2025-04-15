@@ -25,7 +25,7 @@ public class GamePanel extends JPanel
 
     public World world = new World(this);
 
-    public Player player = new Player(this);
+    public Player player = new Player(this,world);
 
     Thread game;
 
