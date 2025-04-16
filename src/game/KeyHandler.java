@@ -40,5 +40,7 @@ public class KeyHandler implements KeyListener {
 
         if(e.getKeyCode() == 90)
             zoom = false;
+
+        System.out.println(e.getKeyCode());
     }
 }

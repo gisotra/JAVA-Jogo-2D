@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class Tiles {
     GamePanel gp;
-    int totalTiles = 1;
+    int totalTiles = 3;
     BufferedImage tile[] = new BufferedImage[totalTiles];
 
     public Tiles(GamePanel gp){
@@ -19,7 +19,9 @@ public class Tiles {
 
     private void loadTiles(){
         try {
-            tile[0] = ImageIO.read(getClass().getResourceAsStream("/tiles/grasstile.png"));
+            tile[0] = ImageIO.read(getClass().getResourceAsStream("/tiles/grass.png"));
+            tile[1] = ImageIO.read(getClass().getResourceAsStream("/tiles/flowergrass.png"));
+            tile[2] = ImageIO.read(getClass().getResourceAsStream("/tiles/bush.png"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

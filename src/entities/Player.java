@@ -42,9 +42,9 @@ public class Player extends Entity{
     @Override
     public void update(double deltaTime) {
         adjustSpriteDirection();
-        zooming();
         gp.camera.x = (int)x - screenCenterX;
         gp.camera.y = (int)y - screenCenterY;
+        zooming();
 
         distX = x - gp.camera.x - screenCenterX;
         distY = y - gp.camera.y - screenCenterY;;
@@ -135,6 +135,8 @@ public class Player extends Entity{
         gp.tileSize = (int)((double)gp.originalTileSize*gp.scale);
         gp.screenWidth = gp.gameCols*gp.tileSize;
         gp.screenHeight = gp.gameRows*gp.tileSize;
+        screenCenterY = gp.screenHeight/2 - gp.tileSize/2;
+        screenCenterX = gp.screenWidth/2 - gp.tileSize/2;
     }
 
     @Override
