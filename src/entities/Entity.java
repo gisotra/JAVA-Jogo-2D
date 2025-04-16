@@ -15,6 +15,7 @@ public abstract class Entity {
     public double realSpeed;
     boolean diagonal = false;
     BufferedImage texture;
+    BufferedImage spritesheet;
     World world;
 
     GamePanel gp;

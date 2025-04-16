@@ -18,13 +18,15 @@ public class GameLoop implements Runnable {
         double lastTime = System.nanoTime();
         double nextFrame = System.nanoTime() + frameTime;
         double sleepTime;
+        long sleepMilli;
+        int sleepNano;
+
 
         double start;
         double secondCounter = 0;
 
         while (true) {
             start = System.nanoTime();
-            realFps++;
 
             deltaTime = (System.nanoTime() - lastTime) / 1_000_000_000;
             lastTime = start;
@@ -32,12 +34,15 @@ public class GameLoop implements Runnable {
             update(deltaTime);
             gp.repaint();
 
-            sleepTime = (nextFrame - System.nanoTime()) / 1_000_000.0 ;
+            sleepTime = (nextFrame - System.nanoTime())/1_000_000;
             if(sleepTime < 0)
                 sleepTime = 0;
 
+            sleepMilli = (long)sleepTime;
+            sleepNano = (int) ((sleepTime - sleepMilli)*1_000_000);
+
             try {
-                Thread.sleep((long)sleepTime);
+                Thread.sleep(sleepMilli,sleepNano);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -49,6 +54,7 @@ public class GameLoop implements Runnable {
                 secondCounter = 0;
             }
 
+            realFps++;
             nextFrame += frameTime;
         }
     }

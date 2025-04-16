@@ -5,6 +5,7 @@ import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener {
     public boolean upKey = false, downKey = false, leftKey = false, rightKey = false;
+    public boolean zoom = false;
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -21,6 +22,9 @@ public class KeyHandler implements KeyListener {
             leftKey = true;
         if(e.getKeyCode() == 68)
             rightKey = true;
+
+        if(e.getKeyCode() == 90)
+            zoom = true;
     }
 
     @Override
@@ -33,5 +37,8 @@ public class KeyHandler implements KeyListener {
             leftKey = false;
         if(e.getKeyCode() == 68)
             rightKey = false;
+
+        if(e.getKeyCode() == 90)
+            zoom = false;
     }
 }

@@ -14,26 +14,35 @@ public class Player extends Entity{
     double distY;
     double cameraSpeed = 3;
     double realCameraSpeed;
+    String spriteDir = "down";
     public Player(GamePanel gp, World world){
         super(gp,world);
     }
     int screenCenterY = gp.screenHeight/2 - gp.tileSize/2;
     int screenCenterX = gp.screenWidth/2 - gp.tileSize/2;
 
+    double maxZoom;
+    double minZoom;
+
     @Override
     public void setDefaultValues() {
         x = (double) gp.screenWidth /2 - (double) gp.tileSize /2;
         y = (double) gp.screenHeight /2 - (double) gp.tileSize /2;
         speed = gp.tileSize*5;
+        minZoom = gp.scale;
+        maxZoom = gp.scale*4;
         try {
-            texture = ImageIO.read(getClass().getResourceAsStream("/players/player_idle_down.png"));
+            spritesheet = ImageIO.read(getClass().getResourceAsStream("/players/playersheet.png"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        texture = spritesheet.getSubimage(0,0,gp.originalTileSize,gp.originalTileSize);
     }
 
     @Override
     public void update(double deltaTime) {
+        adjustSpriteDirection();
+        zooming();
         gp.camera.x = (int)x - screenCenterX;
         gp.camera.y = (int)y - screenCenterY;
 
@@ -51,35 +60,32 @@ public class Player extends Entity{
         }
         if (gp.kh.upKey) {
             nextY -= (int) (realSpeed * deltaTime); //player
-            try {
-                texture = ImageIO.read(getClass().getResourceAsStream("/players/player_idle_up.png"));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            spriteDir = "up";
         }
         if (gp.kh.downKey) {
             nextY += (int) (realSpeed * deltaTime); //player
-            try {
-                texture = ImageIO.read(getClass().getResourceAsStream("/players/player_idle_down.png"));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            spriteDir = "down";
         }
         if (gp.kh.leftKey) {
             nextX -= (int) (realSpeed * deltaTime); //player
-            try {
-                texture = ImageIO.read(getClass().getResourceAsStream("/players/player_idle_left.png"));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            spriteDir = "left";
         }
         if (gp.kh.rightKey) {
             nextX += (int) (realSpeed * deltaTime); //player
-            try {
-                texture = ImageIO.read(getClass().getResourceAsStream("/players/player_idle_right.png"));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            spriteDir = "right";
+        }
+
+        if(gp.kh.upKey && gp.kh.leftKey){
+            spriteDir = "leftUp";
+        }
+        if(gp.kh.upKey && gp.kh.rightKey){
+            spriteDir = "rightUp";
+        }
+        if(gp.kh.downKey && gp.kh.leftKey){
+            spriteDir = "leftDown";
+        }
+        if(gp.kh.downKey && gp.kh.rightKey){
+            spriteDir = "rightDown";
         }
 
         if(nextX <= world.width && nextX >= 0)
@@ -87,6 +93,48 @@ public class Player extends Entity{
         if(nextY <= world.height && nextY >= 0)
             y = nextY;
 
+    }
+
+    public void adjustSpriteDirection(){
+        if(spriteDir == "down"){
+            texture = spritesheet.getSubimage(0,0,gp.originalTileSize,gp.originalTileSize);
+        }
+        if(spriteDir == "rightDown"){
+            texture = spritesheet.getSubimage(0,gp.originalTileSize*1,gp.originalTileSize,gp.originalTileSize);
+        }
+        if(spriteDir == "right"){
+            texture = spritesheet.getSubimage(0,gp.originalTileSize*2,gp.originalTileSize,gp.originalTileSize);
+        }
+        if(spriteDir == "rightUp"){
+            texture = spritesheet.getSubimage(0,gp.originalTileSize*3,gp.originalTileSize,gp.originalTileSize);
+        }
+        if(spriteDir == "up"){
+            texture = spritesheet.getSubimage(0,gp.originalTileSize*4,gp.originalTileSize,gp.originalTileSize);
+        }
+        if(spriteDir == "leftUp"){
+            texture = spritesheet.getSubimage(0,gp.originalTileSize*5,gp.originalTileSize,gp.originalTileSize);
+        }
+        if(spriteDir == "left"){
+            texture = spritesheet.getSubimage(0,gp.originalTileSize*6,gp.originalTileSize,gp.originalTileSize);
+        }
+        if(spriteDir == "leftDown"){
+            texture = spritesheet.getSubimage(0,gp.originalTileSize*7,gp.originalTileSize,gp.originalTileSize);
+        }
+    }
+
+    public void zooming(){
+        if(gp.kh.zoom){
+            if(gp.scale < maxZoom){
+                gp.scale += 0.1;
+            }
+        }else{
+            if(gp.scale > minZoom){
+                gp.scale -= 0.1;
+            }
+        }
+        gp.tileSize = (int)((double)gp.originalTileSize*gp.scale);
+        gp.screenWidth = gp.gameCols*gp.tileSize;
+        gp.screenHeight = gp.gameRows*gp.tileSize;
     }
 
     @Override

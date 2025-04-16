@@ -9,11 +9,11 @@ import java.awt.*;
 
 public class GamePanel extends JPanel
 {
-    int originalTileSize = 32;
-    int scale = 3;
-    public int tileSize = originalTileSize*scale;
-    int gameCols = 9;
-    int gameRows = 9;
+    public int originalTileSize = 32;
+    public double scale = 3;
+    public int tileSize = (int)((double)originalTileSize*scale);
+    public int gameCols = 16;
+    public int gameRows = 9;
     public int screenWidth = gameCols*tileSize;
     public int screenHeight = gameRows*tileSize;
     GameLoop gl;
