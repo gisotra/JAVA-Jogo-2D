@@ -2,13 +2,14 @@ package entities;
 
 import game.GameLoop;
 import game.GamePanel;
+import game.Renderable;
 import world.World;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public abstract class Entity {
+public abstract class Entity implements Renderable {
     public double x;
     public double y;
     public double speed;
@@ -26,6 +27,7 @@ public abstract class Entity {
         setDefaultValues();
     }
 
+    @Override
     public void render(Graphics2D g2d){
         g2d.drawImage(texture,(int)x,(int)y,gp.tileSize, gp.tileSize, null);
     }

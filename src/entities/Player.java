@@ -1,13 +1,14 @@
 package entities;
 
 import game.GamePanel;
+import game.Renderable;
 import world.World;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.IOException;
 
-public class Player extends Entity{
+public class Player extends Entity implements Renderable {
     double nextX;
     double nextY;
     double distX;
@@ -142,5 +143,9 @@ public class Player extends Entity{
     @Override
     public void render(Graphics2D g2d){
         g2d.drawImage(texture,screenCenterX,screenCenterY,gp.tileSize, gp.tileSize, null);
+    }
+
+    public double getY(){
+        return y;
     }
 }
