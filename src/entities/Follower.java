@@ -108,7 +108,16 @@ public class Follower extends Entity implements Renderable {
     }
 
     public void watchControl() {
-        if((gp.player.spriteDir == "leftUp" || gp.player.spriteDir == "up" || gp.player.spriteDir == "up") && spriteDir == "rightDown"){
+        if((gp.player.spriteDir == "leftUp" || gp.player.spriteDir == "left" || gp.player.spriteDir == "up") && spriteDir == "rightDown"){
+            beingWatched = true;
+        }
+        else if((gp.player.spriteDir == "rightUp" || gp.player.spriteDir == "right" || gp.player.spriteDir == "up") && spriteDir == "leftDown"){
+            beingWatched = true;
+        }
+        else if((gp.player.spriteDir == "leftDown" || gp.player.spriteDir == "left" || gp.player.spriteDir == "down") && spriteDir == "rightUp"){
+            beingWatched = true;
+        }
+        else if((gp.player.spriteDir == "rightDown" || gp.player.spriteDir == "right" || gp.player.spriteDir == "down") && spriteDir == "leftUp"){
             beingWatched = true;
         }
         else{
