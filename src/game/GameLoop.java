@@ -61,5 +61,7 @@ public class GameLoop implements Runnable {
 
     public void update(double deltaTime) {
         gp.player.update(deltaTime);
+        gp.objetos.sort((a,b) -> (int)(a.getY() - b.getY()));
+        System.out.println(gp.objetos);
     }
 }

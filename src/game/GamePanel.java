@@ -8,6 +8,7 @@ import world.World;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class GamePanel extends JPanel
@@ -31,7 +32,7 @@ public class GamePanel extends JPanel
 
     public Player player = new Player(this,world);
 
-    public Tree tree = new Tree(this, camera,2*tileSize,2*tileSize);
+    public Tree tree = new Tree(this, camera,0,0);
 
     Thread game;
 

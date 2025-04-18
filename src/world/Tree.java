@@ -21,13 +21,11 @@ public class Tree extends Element implements Renderable {
     }
     @Override
     public double getY() {
-        return y;
+        return y+texture.getHeight()*gp.scale;
     }
 
     @Override
     public void render(Graphics2D g2d) {
-        double positionX = x + (texture.getWidth()*(int)gp.scale/2);
-        double positionY = y + (texture.getHeight()*(int)gp.scale/2);
-        g2d.drawImage(texture,(int)positionX-(int)camera.x,(int)positionY- (int)camera.y,texture.getWidth()*(int)gp.scale,texture.getHeight()*(int)gp.scale,null);
+        g2d.drawImage(texture,(int)(x - camera.x),(int)(y - camera.y),texture.getWidth()*(int)gp.scale,texture.getHeight()*(int)gp.scale,null);
     }
 }

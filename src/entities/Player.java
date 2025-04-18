@@ -146,6 +146,6 @@ public class Player extends Entity implements Renderable {
     }
 
     public double getY(){
-        return y;
+        return y + texture.getHeight()*gp.scale;
     }
 }
