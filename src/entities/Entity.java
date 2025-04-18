@@ -15,7 +15,7 @@ public abstract class Entity implements Renderable {
     public double speed;
     public double realSpeed;
     boolean diagonal = false;
-    BufferedImage texture;
+    public BufferedImage texture;
     BufferedImage spritesheet;
     World world;
 

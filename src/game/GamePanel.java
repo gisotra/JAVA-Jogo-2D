@@ -1,8 +1,7 @@
 package game;
 
+import entities.Follower;
 import entities.Player;
-import shaders.AtmosphereShader;
-import shaders.BloomFilter;
 import world.Camera;
 import world.Tree;
 import world.World;
@@ -27,7 +26,7 @@ public class GamePanel extends Canvas
     List<Renderable> objetos = new ArrayList<>();
     GameLoop gl;
 
-    public final double FPS = 60.0;
+    public final double FPS = 120.0;
     public KeyHandler kh = new KeyHandler();
 
     public Camera camera = new Camera();
@@ -35,6 +34,7 @@ public class GamePanel extends Canvas
     public World world = new World(this);
 
     public Player player = new Player(this,world);
+    public Follower follower = new Follower(this,world);
 
     public Tree tree = new Tree(this, camera,world.width/2,world.height/2);
 
@@ -58,6 +58,7 @@ public class GamePanel extends Canvas
         } catch (IOException e){}
 
         objetos.add(player);
+        objetos.add(follower);
         objetos.add(tree);
 
         //cria um cursor customizado invisivel
