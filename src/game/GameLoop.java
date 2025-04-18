@@ -31,8 +31,11 @@ public class GameLoop implements Runnable {
             deltaTime = (System.nanoTime() - lastTime) / 1_000_000_000;
             lastTime = start;
 
+            // Limita deltaTime máximo
+            deltaTime = Math.min(deltaTime, 1.0 / 30.0); // Limita a aceleração excessiva
+
             update(deltaTime);
-            gp.repaint();
+            gp.render();
 
             sleepTime = (nextFrame - System.nanoTime())/1_000_000;
             if(sleepTime < 0)

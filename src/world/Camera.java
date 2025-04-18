@@ -4,8 +4,8 @@ import entities.Player;
 import game.GamePanel;
 
 public class Camera {
-    public double x;
-    public double y;
+    public int x;
+    public int y;
 
     public Camera(){
     }

@@ -11,9 +11,7 @@ import java.io.IOException;
 public class Player extends Entity implements Renderable {
     double nextX;
     double nextY;
-    double distX;
-    double distY;
-    double cameraSpeed = 3;
+    double cameraSpeed = 3.0;
     double realCameraSpeed;
     String spriteDir = "down";
     public Player(GamePanel gp, World world){
@@ -43,36 +41,32 @@ public class Player extends Entity implements Renderable {
     @Override
     public void update(double deltaTime) {
         adjustSpriteDirection();
-        gp.camera.x = (int)x - screenCenterX;
-        gp.camera.y = (int)y - screenCenterY;
-        zooming();
-
-        distX = x - gp.camera.x - screenCenterX;
-        distY = y - gp.camera.y - screenCenterY;;
+        gp.camera.x = (int)(x - screenCenterX);
+        gp.camera.y = (int)(y - screenCenterY);
 
         nextX = x;
         nextY = y;
 
-        realSpeed = speed;
+        realSpeed = speed*deltaTime;
         realCameraSpeed = cameraSpeed;
 
         if(gp.kh.upKey && (gp.kh.leftKey || gp.kh.rightKey) || gp.kh.downKey && (gp.kh.leftKey || gp.kh.rightKey)) {
-            realSpeed /= Math.sqrt(2);
+            realSpeed = (realSpeed / Math.sqrt(2));
         }
         if (gp.kh.upKey) {
-            nextY -= (int) (realSpeed * deltaTime); //player
+            nextY -= realSpeed; //player
             spriteDir = "up";
         }
         if (gp.kh.downKey) {
-            nextY += (int) (realSpeed * deltaTime); //player
+            nextY += realSpeed; //player
             spriteDir = "down";
         }
         if (gp.kh.leftKey) {
-            nextX -= (int) (realSpeed * deltaTime); //player
+            nextX -= realSpeed; //player
             spriteDir = "left";
         }
         if (gp.kh.rightKey) {
-            nextX += (int) (realSpeed * deltaTime); //player
+            nextX += realSpeed; //player
             spriteDir = "right";
         }
 
@@ -121,23 +115,6 @@ public class Player extends Entity implements Renderable {
         if(spriteDir == "leftDown"){
             texture = spritesheet.getSubimage(0,gp.originalTileSize*7,gp.originalTileSize,gp.originalTileSize);
         }
-    }
-
-    public void zooming(){
-        if(gp.kh.zoom){
-            if(gp.scale < maxZoom){
-                gp.scale += 0.1;
-            }
-        }else{
-            if(gp.scale > minZoom){
-                gp.scale -= 0.1;
-            }
-        }
-        gp.tileSize = (int)((double)gp.originalTileSize*gp.scale);
-        gp.screenWidth = gp.gameCols*gp.tileSize;
-        gp.screenHeight = gp.gameRows*gp.tileSize;
-        screenCenterY = gp.screenHeight/2 - gp.tileSize/2;
-        screenCenterX = gp.screenWidth/2 - gp.tileSize/2;
     }
 
     @Override

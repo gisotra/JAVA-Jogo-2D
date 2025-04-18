@@ -1,17 +1,21 @@
 package game;
 
 import entities.Player;
+import shaders.AtmosphereShader;
+import shaders.BloomFilter;
 import world.Camera;
 import world.Tree;
 import world.World;
 
-import javax.swing.*;
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
-public class GamePanel extends JPanel
+public class GamePanel extends Canvas
 {
     public int originalTileSize = 32;
     public double scale = 3;
@@ -34,6 +38,11 @@ public class GamePanel extends JPanel
 
     public Tree tree = new Tree(this, camera,world.width/2,world.height/2);
 
+    Cursor c;
+    Point cursorPoint;
+
+    BufferedImage mouseImg;
+
     Thread game;
 
     public GamePanel()
@@ -42,19 +51,32 @@ public class GamePanel extends JPanel
         setBackground(Color.black);
         setFocusable(true);
         addKeyListener(kh);
-        gl = new GameLoop(this);
-        game = new Thread(gl);
-        game.start();
+
+        //carrega a textura do cursor
+        try{
+            mouseImg = ImageIO.read(getClass().getResourceAsStream("/cursor/cursor.png"));
+        } catch (IOException e){}
+
         objetos.add(player);
         objetos.add(tree);
+
+        //cria um cursor customizado invisivel
+        c = Toolkit.getDefaultToolkit().createCustomCursor(new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB),new Point(0,0),"cursor");
+        //seta o cursor invisivel para este componente (Canvas)
+        setCursor(c);
+
+        gl = new GameLoop(this);
+        game = new Thread(gl);
     }
 
-    @Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
+    public void render() {
+        //obtem o bufferStrategy do componente
+        BufferStrategy bufferStrategy = getBufferStrategy();
+        Graphics2D g2d = (Graphics2D) bufferStrategy.getDrawGraphics();
 
-        //transformando o pincel em um super pincel
-        Graphics2D g2d = (Graphics2D) g;
+        //começa a desenhar na imagem vazia
+        g2d.setColor(Color.black);
+        g2d.fillRect(0,0,getWidth(),getHeight());
 
         //renderizando a camada do mundo
         world.render(g2d);
@@ -66,5 +88,16 @@ public class GamePanel extends JPanel
         g2d.setFont(new Font("Arial",Font.BOLD,30));
         g2d.setColor(Color.WHITE);
         g2d.drawString("FPS: " + String.valueOf(gl.finalFps),10,40);
+
+        //obter as coordenadas do mouse em relação e este componente e salvar em um objeto Point que tem x e y
+        cursorPoint = getMousePosition();
+
+        //se o cursor estiver na tela ele desenha nossa textura do mouse na posição do cursor
+        if(cursorPoint != null)
+            g2d.drawImage(mouseImg,cursorPoint.x,cursorPoint.y,(int)(mouseImg.getWidth()*scale), (int)(mouseImg.getHeight()*scale), null);
+
+        g2d.dispose();
+        bufferStrategy.show();
+        Toolkit.getDefaultToolkit().sync();
     }
 }
