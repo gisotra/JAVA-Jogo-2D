@@ -16,8 +16,8 @@ public class World {
     public World(GamePanel gp){
         this.gp = gp;
         tiles = new Tiles(gp);
-        cols = 50;
-        rows = 50;
+        cols = 11;
+        rows = 8;
         world = new int[cols][rows];
         width = cols*gp.tileSize - gp.tileSize;
         height = rows*gp.tileSize - gp.tileSize;

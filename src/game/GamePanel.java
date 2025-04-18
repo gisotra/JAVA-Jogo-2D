@@ -23,7 +23,7 @@ public class GamePanel extends JPanel
     List<Renderable> objetos = new ArrayList<>();
     GameLoop gl;
 
-    public final double FPS = 120.0;
+    public final double FPS = 60.0;
     public KeyHandler kh = new KeyHandler();
 
     public Camera camera = new Camera();
@@ -32,7 +32,7 @@ public class GamePanel extends JPanel
 
     public Player player = new Player(this,world);
 
-    public Tree tree = new Tree(this, camera,0,0);
+    public Tree tree = new Tree(this, camera,world.width/2,world.height/2);
 
     Thread game;
 
@@ -50,8 +50,8 @@ public class GamePanel extends JPanel
     }
 
     @Override
-    public void paint(Graphics g) {
-        super.paint(g);
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
 
         //transformando o pincel em um super pincel
         Graphics2D g2d = (Graphics2D) g;

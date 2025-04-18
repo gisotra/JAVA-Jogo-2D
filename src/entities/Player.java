@@ -27,8 +27,8 @@ public class Player extends Entity implements Renderable {
 
     @Override
     public void setDefaultValues() {
-        x = (double) gp.screenWidth /2 - (double) gp.tileSize /2;
-        y = (double) gp.screenHeight /2 - (double) gp.tileSize /2;
+        x = 0;
+        y = 0;
         speed = gp.tileSize*5;
         minZoom = gp.scale;
         maxZoom = gp.scale*4;
