@@ -2,16 +2,22 @@ package game;
 
 public class GameLoop implements Runnable {
 
-    GamePanel gp;
-    int realFps = 0;
-    public int finalFps;
+    /*========== ATRIBUTOS ==========*/
+
+    GamePanel gp;                                                       // Instância do tipo GamePanel
+    int realFps = 0;                                                    // Frames passando no mundo "real"
+    public int finalFps;                                                // O quanto de Frames que foram percorridos a cada segundo
+
+    /*========== CONSTRUTOR ==========*/
 
     public GameLoop(GamePanel gp) {
-        this.gp = gp;
+        this.gp = gp;                                                   // Instanciado o GamePanel
     }
 
+    /*========== MÉTODOS ==========*/
+
     @Override
-    public void run() {
+    public void run() { // chamado no instante que a Thread é iniciada automaticamente
 
         double frameTime = 1_000_000_000.0/gp.FPS;
         double deltaTime;
@@ -20,7 +26,6 @@ public class GameLoop implements Runnable {
         double sleepTime;
         long sleepMilli;
         int sleepNano;
-
 
         double start;
         double secondCounter = 0;
@@ -62,6 +67,7 @@ public class GameLoop implements Runnable {
         }
     }
 
+    /*========== METODO UPDATE ==========*/
     public void update(double deltaTime) {
         gp.player.update(deltaTime);
         gp.follower1.update(deltaTime);

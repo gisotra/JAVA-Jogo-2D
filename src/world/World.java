@@ -38,7 +38,7 @@ public class World {
         }
     }
 
-    public void render(Graphics2D g){
+    public void renderWorld(Graphics2D g){
         for(int i = 0; i < cols; i++){
             for(int j = 0; j < rows; j++){
                 double tileX = i*Global.TILESIZE - gp.camera.x;
