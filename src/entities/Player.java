@@ -5,22 +5,36 @@ import game.Renderable;
 import utilities.Global;
 import utilities.ImageManager;
 import world.World;
+import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.IOException;
 
 public class Player extends Entity implements Renderable {
+
+    /*=============== ATRIBUTOS ===============*/
+
     double nextX;
     double nextY;
     double cameraSpeed = 3.0;
     double realCameraSpeed;
     String spriteDir = "down";
+
+    //
+    public BufferedImage[][] spriteslash = new BufferedImage[4][4];
+    BufferedImage spritesheet2;
+
+    /*=============== CONSTRUTOR ===============*/
+
     public Player(GamePanel gp, World world){
         super(gp,world);
     }
+
     int screenCenterY = gp.screenHeight/2 - Global.TILESIZE/2;
     int screenCenterX = gp.screenWidth/2 - Global.TILESIZE/2;
+
+    /*=============== MÉTODOS ===============*/
 
     @Override
     public void loadEntityData() {
@@ -30,7 +44,7 @@ public class Player extends Entity implements Renderable {
         speed = Global.TILESIZE*5;
         orientation = 0;
 
-        //carregar spritesheet e array de sprites
+        //carregar spritesheet e array de sprites DO PLAYER
         try {
             spritesheet = ImageIO.read(getClass().getResourceAsStream("/entities/players/playersheet.png"));
 
@@ -40,13 +54,30 @@ public class Player extends Entity implements Renderable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        //carregar spritesheet2 (sprites de CORTE DO ATAQUE)
+        try {
+            spritesheet2 = ImageIO.read(getClass().getResourceAsStream("/entities/players/slashsheet.png"));
+            for(int angulo = 0; angulo < 4; angulo++){
+                for(int frame = 0; frame < 4; frame++){
+                    spriteslash[angulo][frame] =  ImageManager.getCroppedImg(spritesheet2,0,(int)(Global.ORIGINAL_TILESIZE * frame), (int)(Global.ORIGINAL_TILESIZE * angulo), (int)Global.ORIGINAL_TILESIZE);
+                }
+            }
+
+        } catch (IOException e){
+            throw new RuntimeException(e);
+        }
+
+
     }
 
     @Override
-    public void update(double deltaTime) {
+    public void update(double deltaTime) { // É aqui que os inputs do usuário serão lidos e executados no player
+
         adjustSpriteDirection();
-        gp.camera.x = (int)(x - screenCenterX);
-        gp.camera.y = (int)(y - screenCenterY);
+
+        gp.camera.x = (int)(x - screenCenterX); // camera segue horizontalmente
+        gp.camera.y = (int)(y - screenCenterY); // camera segue verticalmente
 
         nextX = x;
         nextY = y;
@@ -54,12 +85,15 @@ public class Player extends Entity implements Renderable {
         realSpeed = speed*deltaTime;
         realCameraSpeed = cameraSpeed;
 
+        /*======================== MOVIMENTAÇÃO DO PLAYER ========================*/
+
         if(gp.kh.upKey && (gp.kh.leftKey || gp.kh.rightKey) || gp.kh.downKey && (gp.kh.leftKey || gp.kh.rightKey)) {
-            realSpeed = (realSpeed / Math.sqrt(2));
+            realSpeed = (realSpeed / Math.sqrt(2)); // diagonal
         }
-        if (gp.kh.upKey) {
-            nextY -= realSpeed; //player
-            spriteDir = "up";
+
+        if (gp.kh.upKey) {                                          // Caso o atributo booleano upKey da instância KeyHandler dentro do GamePanel for verdade
+            nextY -= realSpeed;                                     // O player sobe
+            spriteDir = "up";                                       // A direção é alterada
         }
         if (gp.kh.downKey) {
             nextY += realSpeed; //player
@@ -73,7 +107,6 @@ public class Player extends Entity implements Renderable {
             nextX += realSpeed; //player
             spriteDir = "right";
         }
-
         if(gp.kh.upKey && gp.kh.leftKey){
             spriteDir = "leftUp";
         }
@@ -87,10 +120,15 @@ public class Player extends Entity implements Renderable {
             spriteDir = "rightDown";
         }
 
+        // movimentação do player validada
         if(nextX <= world.width && nextX >= 0)
             x = nextX;
         if(nextY <= world.height && nextY >= 0)
             y = nextY;
+
+        /*======================== ATAQUE DO PLAYER ========================*/
+
+
 
     }
 

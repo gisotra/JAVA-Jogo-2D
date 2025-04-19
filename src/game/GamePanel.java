@@ -36,6 +36,8 @@ public class GamePanel extends Canvas  // Classe GamePanel extende Canvas
 
     public KeyHandler kh = new KeyHandler();                                        // Objeto do tipo KeyHandler, que serve para os inputs do usuário no jogo
 
+    public MouseInputs mI = new MouseInputs();
+
     public Camera camera = new Camera();                                            // Objeto do tipo Câmera
 
     public World world = new World(this);                                           // Objeto do tipo World
@@ -68,7 +70,8 @@ public class GamePanel extends Canvas  // Classe GamePanel extende Canvas
         setBackground(Color.black); // Fundo preto
         setFocusable(true); // Habilita inputs
         addKeyListener(kh); // Adiciona um leitor
-
+        addMouseListener(mI);
+        addMouseMotionListener(mI);
         // Carrega a textura do cursor
         try{
             mouseImg = ImageIO.read(getClass().getResourceAsStream("/cursor/aim.png"));

@@ -19,6 +19,8 @@ public class GameLoop implements Runnable {
     @Override
     public void run() { // chamado no instante que a Thread é iniciada automaticamente
 
+
+        //variáveis do metodo run
         double frameTime = 1_000_000_000.0/gp.FPS;
         double deltaTime;
         double lastTime = System.nanoTime();
@@ -30,6 +32,7 @@ public class GameLoop implements Runnable {
         double start;
         double secondCounter = 0;
 
+        // o loop em si
         while (true) {
             start = System.nanoTime();
 
@@ -39,8 +42,8 @@ public class GameLoop implements Runnable {
             // Limita deltaTime máximo
             deltaTime = Math.min(deltaTime, 1.0 / 30.0); // Limita a aceleração excessiva
 
-            update(deltaTime);
-            gp.render();
+            update(deltaTime); //Atualiza
+            gp.render(); //Pinta
 
             sleepTime = (nextFrame - System.nanoTime())/1_000_000;
             if(sleepTime < 0)
