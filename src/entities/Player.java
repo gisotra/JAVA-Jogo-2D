@@ -2,6 +2,8 @@ package entities;
 
 import game.GamePanel;
 import game.Renderable;
+import utilities.Global;
+import utilities.ImageManager;
 import world.World;
 
 import javax.imageio.ImageIO;
@@ -17,25 +19,27 @@ public class Player extends Entity implements Renderable {
     public Player(GamePanel gp, World world){
         super(gp,world);
     }
-    int screenCenterY = gp.screenHeight/2 - gp.tileSize/2;
-    int screenCenterX = gp.screenWidth/2 - gp.tileSize/2;
-
-    double maxZoom;
-    double minZoom;
+    int screenCenterY = gp.screenHeight/2 - Global.TILESIZE/2;
+    int screenCenterX = gp.screenWidth/2 - Global.TILESIZE/2;
 
     @Override
-    public void setDefaultValues() {
+    public void loadEntityData() {
+        //definindo propriedades
         x = 0;
         y = 0;
-        speed = gp.tileSize*5;
-        minZoom = gp.scale;
-        maxZoom = gp.scale*4;
+        speed = Global.TILESIZE*5;
+        orientation = 0;
+
+        //carregar spritesheet e array de sprites
         try {
             spritesheet = ImageIO.read(getClass().getResourceAsStream("/entities/players/playersheet.png"));
+
+            for(int i = 0; i < 8; i++){
+                sprites[i] = ImageManager.getCroppedImg(spritesheet,0,(int)(Global.ORIGINAL_TILESIZE*i), (int)Global.ORIGINAL_TILESIZE, (int)Global.ORIGINAL_TILESIZE);
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        texture = spritesheet.getSubimage(0,0,gp.originalTileSize,gp.originalTileSize);
     }
 
     @Override
@@ -92,37 +96,37 @@ public class Player extends Entity implements Renderable {
 
     public void adjustSpriteDirection(){
         if(spriteDir == "down"){
-            texture = spritesheet.getSubimage(0,0,gp.originalTileSize,gp.originalTileSize);
+            orientation = Global.DOWN;
         }
         if(spriteDir == "rightDown"){
-            texture = spritesheet.getSubimage(0,gp.originalTileSize*1,gp.originalTileSize,gp.originalTileSize);
+            orientation = Global.RIGHT_DOWN;
         }
         if(spriteDir == "right"){
-            texture = spritesheet.getSubimage(0,gp.originalTileSize*2,gp.originalTileSize,gp.originalTileSize);
+            orientation = Global.RIGHT;
         }
         if(spriteDir == "rightUp"){
-            texture = spritesheet.getSubimage(0,gp.originalTileSize*3,gp.originalTileSize,gp.originalTileSize);
+            orientation = Global.RIGHT_UP;
         }
         if(spriteDir == "up"){
-            texture = spritesheet.getSubimage(0,gp.originalTileSize*4,gp.originalTileSize,gp.originalTileSize);
+            orientation = Global.UP;
         }
         if(spriteDir == "leftUp"){
-            texture = spritesheet.getSubimage(0,gp.originalTileSize*5,gp.originalTileSize,gp.originalTileSize);
+            orientation = Global.LEFT_UP;
         }
         if(spriteDir == "left"){
-            texture = spritesheet.getSubimage(0,gp.originalTileSize*6,gp.originalTileSize,gp.originalTileSize);
+            orientation = Global.LEFT;
         }
         if(spriteDir == "leftDown"){
-            texture = spritesheet.getSubimage(0,gp.originalTileSize*7,gp.originalTileSize,gp.originalTileSize);
+            orientation = Global.LEFT_DOWN;
         }
     }
 
     @Override
     public void render(Graphics2D g2d){
-        g2d.drawImage(texture,screenCenterX,screenCenterY,gp.tileSize, gp.tileSize, null);
+        g2d.drawImage(sprites[orientation],screenCenterX,screenCenterY,Global.TILESIZE, Global.TILESIZE, null);
     }
 
     public double getY(){
-        return y + texture.getHeight()*gp.scale;
+        return y + sprites[orientation].getHeight()*gp.scale;
     }
 }

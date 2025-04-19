@@ -1,6 +1,7 @@
 package world;
 
 import game.GamePanel;
+import utilities.Global;
 
 import java.awt.*;
 import java.util.Random;
@@ -9,18 +10,18 @@ public class World {
     int cols,rows;
     public int width, height;
     public int[][] world;
-    GamePanel gp;
     Tiles tiles;
     Random random = new Random();
+    GamePanel gp;
 
     public World(GamePanel gp){
         this.gp = gp;
-        tiles = new Tiles(gp);
+        tiles = new Tiles();
         cols = 50;
         rows = 50;
         world = new int[cols][rows];
-        width = cols*gp.tileSize - gp.tileSize;
-        height = rows*gp.tileSize - gp.tileSize;
+        width = cols* Global.TILESIZE - Global.TILESIZE;
+        height = rows* Global.TILESIZE - Global.TILESIZE;
         convertWorld();
     }
 
@@ -40,10 +41,10 @@ public class World {
     public void render(Graphics2D g){
         for(int i = 0; i < cols; i++){
             for(int j = 0; j < rows; j++){
-                double tileX = i*gp.tileSize - gp.camera.x;
-                double tileY = j*gp.tileSize - gp.camera.y;
+                double tileX = i*Global.TILESIZE - gp.camera.x;
+                double tileY = j*Global.TILESIZE - gp.camera.y;
 
-                if(tileX > - gp.tileSize && tileX < gp.screenWidth && tileY > - gp.tileSize && tileY < gp.screenHeight) {
+                if(tileX > - Global.TILESIZE && tileX < gp.screenWidth && tileY > - Global.TILESIZE && tileY < gp.screenHeight) {
                     tiles.drawTile(g, world[i][j], (int)tileX, (int)tileY);
                 }
             }

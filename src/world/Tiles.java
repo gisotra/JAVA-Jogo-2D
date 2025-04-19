@@ -1,6 +1,7 @@
 package world;
 
 import game.GamePanel;
+import utilities.Global;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -8,12 +9,10 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class Tiles {
-    GamePanel gp;
     int totalTiles = 3;
     BufferedImage tile[] = new BufferedImage[totalTiles];
 
-    public Tiles(GamePanel gp){
-        this.gp = gp;
+    public Tiles(){
         loadTiles();
     }
 
@@ -28,6 +27,6 @@ public class Tiles {
     }
 
     public void drawTile(Graphics g,int id,int x,int y){
-        g.drawImage(tile[id],x,y,gp.tileSize, gp.tileSize, null);
+        g.drawImage(tile[id],x,y,Global.TILESIZE, Global.TILESIZE, null);
     }
 }

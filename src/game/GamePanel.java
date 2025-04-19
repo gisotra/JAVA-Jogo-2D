@@ -18,7 +18,7 @@ public class GamePanel extends Canvas
 {
     public int originalTileSize = 32;
     public double scale = 3;
-    public int tileSize = (int)((double)originalTileSize*scale);
+    public int tileSize = (int)(originalTileSize*scale);
     public int gameCols = 16;
     public int gameRows = 9;
     public int screenWidth = gameCols*tileSize;
@@ -34,7 +34,12 @@ public class GamePanel extends Canvas
     public World world = new World(this);
 
     public Player player = new Player(this,world);
-    public Follower follower = new Follower(this,world);
+    public Follower follower1 = new Follower(this,world,0,0);
+    public Follower follower2 = new Follower(this,world,3*tileSize,5*tileSize);
+    public Follower follower3 = new Follower(this,world,8*tileSize,8*tileSize);
+    public Follower follower4 = new Follower(this,world,20*tileSize,5*tileSize);
+    public Follower follower5 = new Follower(this,world,1*tileSize,15*tileSize);
+    public Follower follower6 = new Follower(this,world,12*tileSize,36*tileSize);
 
     public Tree tree = new Tree(this, camera,world.width/2,world.height/2);
 
@@ -58,7 +63,12 @@ public class GamePanel extends Canvas
         } catch (IOException e){}
 
         objetos.add(player);
-        objetos.add(follower);
+        objetos.add(follower1);
+        objetos.add(follower2);
+        objetos.add(follower3);
+        objetos.add(follower4);
+        objetos.add(follower5);
+        objetos.add(follower6);
         objetos.add(tree);
 
         //cria um cursor customizado invisivel

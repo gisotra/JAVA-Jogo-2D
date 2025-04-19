@@ -1,8 +1,6 @@
 package game;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.awt.image.BufferedImage;
 
 public class GameFrame extends JFrame {
     GamePanel gp = new GamePanel();
@@ -15,7 +13,7 @@ public class GameFrame extends JFrame {
         gp.createBufferStrategy(3);
         gp.game.start();
         setResizable(false);
-        setIconImage(gp.player.texture);
+        setIconImage(gp.player.sprites[0]);
         setLocationRelativeTo(null);
         setVisible(true);
     }
