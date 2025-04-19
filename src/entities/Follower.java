@@ -17,7 +17,7 @@ public class Follower extends Entity implements Renderable {
     double nextY;
     String spriteDir = "down";
     BufferedImage spritesheetinactive;
-    BufferedImage spritesheetactive;
+    BufferedImage[] spritesInactive;
     Random random = new Random();
 
     double dx;
@@ -39,13 +39,16 @@ public class Follower extends Entity implements Renderable {
         //definindo propriedades
         speed = Global.TILESIZE*3;
         orientation = 0;
+        spritesInactive = new BufferedImage[8];
 
         //carregar spritesheet e array de sprites
         try {
             spritesheet = ImageIO.read(getClass().getResourceAsStream("/entities/monsters/followersheet.png"));
+            spritesheetinactive = ImageIO.read(getClass().getResourceAsStream("/entities/monsters/followersheet_inactive.png"));
 
-            for(int i = 0; i < 8; i++){
-                sprites[i] = ImageManager.getCroppedImg(spritesheet,0,(int)(Global.ORIGINAL_TILESIZE*i), (int)Global.ORIGINAL_TILESIZE, (int)Global.ORIGINAL_TILESIZE);
+            for(int i = 0; i < 8; i++) {
+                sprites[i] = ImageManager.getCroppedImg(spritesheet, 0, (int) (Global.ORIGINAL_TILESIZE * i), (int) Global.ORIGINAL_TILESIZE, (int) Global.ORIGINAL_TILESIZE);
+                spritesInactive[i] = ImageManager.getCroppedImg(spritesheetinactive, 0, (int) (Global.ORIGINAL_TILESIZE * i), (int) Global.ORIGINAL_TILESIZE, (int) Global.ORIGINAL_TILESIZE);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -55,14 +58,6 @@ public class Follower extends Entity implements Renderable {
     @Override
     public void update(double deltaTime) {
         adjustSpriteDirection();
-
-        if(beingWatched){
-            spritesheet = spritesheetinactive;
-        }
-        else{
-            spritesheet = spritesheetactive;
-        }
-
 
         nextX = x;
         nextY = y;
@@ -148,7 +143,10 @@ public class Follower extends Entity implements Renderable {
 
     @Override
     public void render(Graphics2D g2d){
-        g2d.drawImage(sprites[orientation],(int)x- gp.camera.x,(int)y - gp.camera.y,Global.TILESIZE, Global.TILESIZE, null);
+        if(!beingWatched)
+            g2d.drawImage(sprites[orientation],(int)x- gp.camera.x,(int)y - gp.camera.y,Global.TILESIZE, Global.TILESIZE, null);
+        else
+            g2d.drawImage(spritesInactive[orientation],(int)x- gp.camera.x,(int)y - gp.camera.y,Global.TILESIZE, Global.TILESIZE, null);
     }
 
     public double getY(){

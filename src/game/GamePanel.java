@@ -2,6 +2,7 @@ package game;
 
 import entities.Follower;
 import entities.Player;
+import utilities.Global;
 import world.Camera;
 import world.Tree;
 import world.World;
@@ -59,7 +60,7 @@ public class GamePanel extends Canvas
 
         //carrega a textura do cursor
         try{
-            mouseImg = ImageIO.read(getClass().getResourceAsStream("/cursor/cursor.png"));
+            mouseImg = ImageIO.read(getClass().getResourceAsStream("/cursor/aim.png"));
         } catch (IOException e){}
 
         objetos.add(player);
@@ -105,7 +106,8 @@ public class GamePanel extends Canvas
 
         //se o cursor estiver na tela ele desenha nossa textura do mouse na posição do cursor
         if(cursorPoint != null)
-            g2d.drawImage(mouseImg,cursorPoint.x,cursorPoint.y,(int)(mouseImg.getWidth()*scale), (int)(mouseImg.getHeight()*scale), null);
+            //basicamente desenha um cursor na posição dele menos a metade do tamanho da imagem que ele representa (pro centro da imagem ser o clique)
+            g2d.drawImage(mouseImg,(int)(cursorPoint.x-mouseImg.getWidth()* Global.SCALE /2),(int)(cursorPoint.y-mouseImg.getHeight()* Global.SCALE/2),(int)(mouseImg.getWidth()*scale), (int)(mouseImg.getHeight()*scale), null);
 
         g2d.dispose();
         bufferStrategy.show();
